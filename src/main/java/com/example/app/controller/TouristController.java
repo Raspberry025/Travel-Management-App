@@ -2,10 +2,14 @@ package com.example.app.controller;
 
 import com.example.app.util.FileHandler;
 import com.example.app.model.Tourist;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class TouristController {
@@ -30,16 +34,30 @@ public class TouristController {
         contactColumn.setCellValueFactory(data -> new javafx.beans.property.SimpleStringProperty(data.getValue().getContact()));
         EmergencyContactColumn.setCellValueFactory(data -> new javafx.beans.property.SimpleStringProperty(data.getValue().getEmergencyContact()));
 
-        List<Tourist> loaded = FileHandler.loadTourists("/com/example/app/data/tourists.txt");
-        touristList.addAll(loaded);
-
+        loadTouristData();
         touristTable.setItems(touristList);
+    }
+
+    private void loadTouristData() {
+        try {
+            List<Tourist> loadedTourists = FileHandler.loadTourists();
+            updateTouristList(loadedTourists);
+        } catch (IOException e) {
+            showAlert(Alert.AlertType.ERROR, "Load Error", "Failed to load tourist data: " + e.getMessage());
+        }
+    }
+
+    private void updateTouristList(List<Tourist> loadedTourists) {
+        Platform.runLater(() -> {
+            touristList.clear();
+            touristList.addAll(loadedTourists);
+        });
     }
 
     @FXML
     public void handleAdd() {
         if (nameField.getText().isEmpty()) {
-            showAlert("Validation Error", "Name field cannot be empty.");
+            showAlert(Alert.AlertType.ERROR, "Error", "Name field cannot be empty.");
             return;
         }
 
@@ -61,8 +79,8 @@ public class TouristController {
         if (selected != null) {
             touristList.remove(selected);
             saveData();
-        }else{
-            showAlert("Error", "Please select a valid tourist.");
+        } else {
+            showAlert(Alert.AlertType.ERROR, "Error", "Please select a valid tourist.");
         }
     }
 
@@ -77,8 +95,8 @@ public class TouristController {
             touristTable.refresh();
             clearFields();
             saveData();
-        }else{
-            showAlert("Error", "Please select a valid tourist to update");
+        } else {
+            showAlert(Alert.AlertType.ERROR, "Error", "Please select a valid tourist to update.");
         }
     }
 
@@ -90,15 +108,17 @@ public class TouristController {
     }
 
     private void saveData() {
-        FileHandler.saveTourists(touristList, "/com/example/app/data/tourists.txt");
+        try {
+            FileHandler.saveTourists(new ArrayList<>(touristList));
+        } catch (IOException e) {
+            showAlert(Alert.AlertType.ERROR, "Save Error", "Failed to save tourist data: " + e.getMessage());
+        }
     }
 
-    private void showAlert(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.WARNING);
+    private void showAlert(Alert.AlertType type, String title, String message) {
+        Alert alert = new Alert(type);
         alert.setTitle(title);
         alert.setContentText(message);
         alert.showAndWait();
     }
-
-
 }

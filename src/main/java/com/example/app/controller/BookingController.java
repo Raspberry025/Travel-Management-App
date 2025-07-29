@@ -2,12 +2,14 @@ package com.example.app.controller;
 
 import com.example.app.model.*;
 import com.example.app.util.FileHandler;
+
+import java.io.IOException;
 import java.util.List;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import java.util.List;
+
 import java.time.LocalDate;
 
 
@@ -26,6 +28,9 @@ public class BookingController {
     @FXML private TextField statusField;
 
     private final ObservableList<Booking> bookingList = FXCollections.observableArrayList();
+    private List<Tourist> touristList;
+    private List<Guide> guideList;
+    private List<Attraction> attractionList;
 
     @FXML
     public void initialize() {
@@ -35,24 +40,22 @@ public class BookingController {
         statusColumn.setCellValueFactory(data -> new javafx.beans.property.SimpleStringProperty(data.getValue().getStatus()));
         dateColumn.setCellValueFactory(data -> new javafx.beans.property.SimpleObjectProperty<>(data.getValue().getDate()));
 
-        List<Booking> loaded = FileHandler.loadBookings(
-                "/com/example/app/data/bookings.txt",
-                touristCombo.getItems(),
-                guideCombo.getItems(),
-                attractionCombo.getItems()
-        );
+        try {
+            touristList = FileHandler.loadTourists();
+            guideList = FileHandler.loadGuides();
+            attractionList = FileHandler.loadAttractions();
 
-        bookingTable.setItems(bookingList);
+            touristCombo.setItems(FXCollections.observableArrayList(touristList));
+            guideCombo.setItems(FXCollections.observableArrayList(guideList));
+            attractionCombo.setItems(FXCollections.observableArrayList(attractionList));
 
-        touristCombo.setItems(FXCollections.observableArrayList(
-                new Tourist("Alex", "USA", "111", "999")
-        ));
-        guideCombo.setItems(FXCollections.observableArrayList(
-                new Guide("Kiran", List.of("English", "Nepali"), 5, "9800000000")
-        ));
-        attractionCombo.setItems(FXCollections.observableArrayList(
-                new Attraction("Annapurna Circuit", "Trek", "Ghorepani", 4130)
-        ));
+            List<Booking> loaded = FileHandler.loadBookings(touristList, guideList, attractionList);
+            bookingList.addAll(loaded);
+            bookingTable.setItems(bookingList);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
@@ -77,6 +80,10 @@ public class BookingController {
         statusField.clear();
     }
     private void saveData() {
-        FileHandler.saveBookings(bookingList, "/com/example/app/data/bookings.txt");
+        try {
+            FileHandler.saveBookings(FXCollections.observableArrayList(bookingList));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

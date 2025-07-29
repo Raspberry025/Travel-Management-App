@@ -5,111 +5,122 @@ import com.example.app.model.Guide;
 import com.example.app.model.Attraction;
 import com.example.app.model.Booking;
 
-
-import java.io.*;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
 public class FileHandler {
 
-    public static void saveTourists(List<Tourist> tourists, String path) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(path))) {
-            for (Tourist t : tourists) {
-                writer.write(t.toString());
-                writer.newLine();
-            }
+    private static final String DATA_DIR = "app-data";
+
+    static {
+        try {
+            Files.createDirectories(Paths.get(DATA_DIR));
         } catch (IOException e) {
-            System.err.println("Error saving tourists: " + e.getMessage());
+            System.err.println("Failed to create data directory: " + e.getMessage());
         }
     }
 
-    public static List<Tourist> loadTourists(String path) {
-        List<Tourist> list = new ArrayList<>();
-        try (BufferedReader reader = new BufferedReader(new FileReader(path))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                Tourist t = Tourist.fromString(line);
-                list.add(t);
-            }
-        } catch (IOException e) {
-            System.err.println("Error loading tourists: " + e.getMessage());
-        }
-        return list;
+    // === TOURIST METHODS ===
+    public static void saveTourists(List<Tourist> tourists) throws IOException {
+        Path filePath = Paths.get(DATA_DIR, "tourists.txt");
+        saveObjects(tourists, filePath);
     }
 
-    // --- GUIDE ---
-    public static void saveGuides(List<Guide> guides, String path) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(path))) {
-            for (Guide g : guides) {
-                writer.write(g.toString());
-                writer.newLine();
-            }
-        } catch (IOException e) {
-            System.err.println("Error saving guides: " + e.getMessage());
-        }
+    public static List<Tourist> loadTourists() throws IOException {
+        Path filePath = Paths.get(DATA_DIR, "tourists.txt");
+        return loadObjects(filePath, Tourist::fromString);
     }
 
-    public static List<Guide> loadGuides(String path) {
-        List<Guide> list = new ArrayList<>();
-        try (BufferedReader reader = new BufferedReader(new FileReader(path))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                list.add(Guide.fromString(line));
-            }
-        } catch (IOException e) {
-            System.err.println("Error loading guides: " + e.getMessage());
-        }
-        return list;
+    // === GUIDE METHODS ===
+    public static void saveGuides(List<Guide> guides) throws IOException {
+        Path filePath = Paths.get(DATA_DIR, "guides.txt");
+        saveObjects(guides, filePath);
     }
 
-    // --- ATTRACTION ---
-    public static void saveAttractions(List<Attraction> attractions, String path) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(path))) {
-            for (Attraction a : attractions) {
-                writer.write(a.toString());
-                writer.newLine();
-            }
-        } catch (IOException e) {
-            System.err.println("Error saving attractions: " + e.getMessage());
-        }
+    public static List<Guide> loadGuides() throws IOException {
+        Path filePath = Paths.get(DATA_DIR, "guides.txt");
+        return loadObjects(filePath, Guide::fromString);
     }
 
-    public static List<Attraction> loadAttractions(String path) {
-        List<Attraction> list = new ArrayList<>();
-        try (BufferedReader reader = new BufferedReader(new FileReader(path))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                list.add(Attraction.fromString(line));
-            }
-        } catch (IOException e) {
-            System.err.println("Error loading attractions: " + e.getMessage());
-        }
-        return list;
+    // === ATTRACTION METHODS ===
+    public static void saveAttractions(List<Attraction> attractions) throws IOException {
+        Path filePath = Paths.get(DATA_DIR, "attractions.txt");
+        saveObjects(attractions, filePath);
     }
 
-    // --- BOOKING ---
-    public static void saveBookings(List<Booking> bookings, String path) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(path))) {
-            for (Booking b : bookings) {
-                writer.write(b.toString());
-                writer.newLine();
-            }
-        } catch (IOException e) {
-            System.err.println("Error saving bookings: " + e.getMessage());
-        }
+    public static List<Attraction> loadAttractions() throws IOException {
+        Path filePath = Paths.get(DATA_DIR, "attractions.txt");
+        return loadObjects(filePath, Attraction::fromString);
     }
 
-    public static List<Booking> loadBookings(String path, List<Tourist> tourists, List<Guide> guides, List<Attraction> attractions) {
-        List<Booking> list = new ArrayList<>();
-        try (BufferedReader reader = new BufferedReader(new FileReader(path))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                list.add(Booking.fromString(line, tourists, guides, attractions));
-            }
-        } catch (IOException e) {
-            System.err.println("Error loading bookings: " + e.getMessage());
-        }
-        return list;
+    // === BOOKING METHODS ===
+    public static void saveBookings(List<Booking> bookings) throws IOException {
+        Path filePath = Paths.get(DATA_DIR, "bookings.txt");
+        saveObjects(bookings, filePath);
     }
 
+    public static List<Booking> loadBookings(List<Tourist> tourists, List<Guide> guides, List<Attraction> attractions) throws IOException {
+        Path filePath = Paths.get(DATA_DIR, "bookings.txt");
+        if (!Files.exists(filePath)) {
+            return new ArrayList<>();
+        }
+
+        List<String> lines = Files.readAllLines(filePath, StandardCharsets.UTF_8);
+        List<Booking> bookings = new ArrayList<>();
+
+        for (String line : lines) {
+            try {
+                if (!line.trim().isEmpty()) {
+                    bookings.add(Booking.fromString(line.trim(), tourists, guides, attractions));
+                }
+            } catch (IllegalArgumentException e) {
+                System.err.println("Skipping invalid booking: " + e.getMessage());
+            }
+        }
+
+        return bookings;
+    }
+
+    // === PRIVATE HELPER METHODS ===
+    private static <T> void saveObjects(List<T> objects, Path filePath) throws IOException {
+        Files.createDirectories(filePath.getParent());
+
+        List<String> lines = new ArrayList<>();
+        for (T obj : objects) {
+            lines.add(obj.toString());
+        }
+
+        Files.write(filePath, lines, StandardCharsets.UTF_8);
+    }
+
+    private static <T> List<T> loadObjects(Path filePath, Parser<T> parser) throws IOException {
+        if (!Files.exists(filePath)) {
+            return new ArrayList<>();
+        }
+
+        List<String> lines = Files.readAllLines(filePath, StandardCharsets.UTF_8);
+        List<T> objects = new ArrayList<>();
+
+        for (String line : lines) {
+            try {
+                if (!line.trim().isEmpty()) {
+                    objects.add(parser.parse(line.trim()));
+                }
+            } catch (IllegalArgumentException e) {
+                System.err.println("Skipping invalid data: " + e.getMessage());
+            }
+        }
+
+        return objects;
+    }
+
+    @FunctionalInterface
+    private interface Parser<T> {
+        T parse(String s) throws IllegalArgumentException;
+    }
 }

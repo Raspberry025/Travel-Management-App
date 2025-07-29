@@ -7,6 +7,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -32,11 +33,15 @@ public class GuideController {
         languagesColumn.setCellValueFactory(data -> new javafx.beans.property.SimpleStringProperty(String.join(", ", data.getValue().getLanguages())));
         experienceColumn.setCellValueFactory(data -> new javafx.beans.property.SimpleIntegerProperty(data.getValue().getExperienceYears()).asObject());
 
-        List<Guide> loaded = FileHandler.loadGuides("/com/example/app/data/guides.txt");
-        guideList.addAll(loaded);
+        try {
+            List<Guide> loaded = FileHandler.loadGuides();
+            guideList.addAll(loaded);
+            guideTable.setItems(guideList);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-        guideTable.setItems(guideList);
-        experienceSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 50, 1));
+        experienceSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 50, 5));
     }
 
     @FXML
@@ -79,6 +84,10 @@ public class GuideController {
     }
 
     private void saveData() {
-        FileHandler.saveGuides(guideList, "/com/example/app/data/guides.txt");
+        try {
+            FileHandler.saveGuides(FXCollections.observableArrayList(guideList));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

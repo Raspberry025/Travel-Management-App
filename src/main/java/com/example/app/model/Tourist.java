@@ -39,8 +39,14 @@ public class Tourist {
         return name + ";" + nationality + ";" + contact + ";" + emergencyContact;
     }
 
-    public static Tourist fromString(String line) {
-        String[] parts = line.split(";");
+    public static Tourist fromString(String str) {
+        if (str == null || str.trim().isEmpty()) {
+            return null;
+        }
+        String[] parts = str.split(";");
+        if (parts.length < 4) {
+            throw new IllegalArgumentException("Invalid Tourist String: " + str);
+        }
         return new Tourist(parts[0], parts[1], parts[2], parts[3]);
     }
 
