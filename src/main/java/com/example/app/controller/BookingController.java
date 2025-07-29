@@ -1,12 +1,13 @@
 package com.example.app.controller;
 
 import com.example.app.model.*;
+import com.example.app.util.FileHandler;
 import java.util.List;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-
+import java.util.List;
 import java.time.LocalDate;
 
 
@@ -34,8 +35,14 @@ public class BookingController {
         statusColumn.setCellValueFactory(data -> new javafx.beans.property.SimpleStringProperty(data.getValue().getStatus()));
         dateColumn.setCellValueFactory(data -> new javafx.beans.property.SimpleObjectProperty<>(data.getValue().getDate()));
 
-        bookingTable.setItems(bookingList);
+        List<Booking> loaded = FileHandler.loadBookings(
+                "data/bookings.txt",
+                touristCombo.getItems(),
+                guideCombo.getItems(),
+                attractionCombo.getItems()
+        );
 
+        bookingTable.setItems(bookingList);
 
         touristCombo.setItems(FXCollections.observableArrayList(
                 new Tourist("Alex", "USA", "111", "999")
@@ -58,6 +65,7 @@ public class BookingController {
                 statusField.getText()
         );
         bookingList.add(booking);
+        saveData();
         clearFields();
     }
 
@@ -67,5 +75,8 @@ public class BookingController {
         attractionCombo.setValue(null);
         datePicker.setValue(null);
         statusField.clear();
+    }
+    private void saveData() {
+        FileHandler.saveBookings(bookingList, "data/bookings.txt");
     }
 }

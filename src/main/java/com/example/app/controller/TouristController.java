@@ -1,10 +1,12 @@
 package com.example.app.controller;
 
+import com.example.app.util.FileHandler;
 import com.example.app.model.Tourist;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import java.util.List;
 
 public class TouristController {
 
@@ -28,18 +30,28 @@ public class TouristController {
         contactColumn.setCellValueFactory(data -> new javafx.beans.property.SimpleStringProperty(data.getValue().getContact()));
         EmergencyContactColumn.setCellValueFactory(data -> new javafx.beans.property.SimpleStringProperty(data.getValue().getEmergencyContact()));
 
+        List<Tourist> loaded = FileHandler.loadTourists("data/tourists.txt");
+        touristList.addAll(loaded);
+
         touristTable.setItems(touristList);
     }
 
     @FXML
     public void handleAdd() {
+        if (nameField.getText().isEmpty()) {
+            showAlert("Validation Error", "Name field cannot be empty.");
+            return;
+        }
+
         Tourist t = new Tourist(
                 nameField.getText(),
                 nationalityField.getText(),
                 contactField.getText(),
                 EmergencyContactField.getText()
         );
+
         touristList.add(t);
+        saveData();
         clearFields();
     }
 
@@ -48,6 +60,9 @@ public class TouristController {
         Tourist selected = touristTable.getSelectionModel().getSelectedItem();
         if (selected != null) {
             touristList.remove(selected);
+            saveData();
+        }else{
+            showAlert("Error", "Please select a valid tourist.");
         }
     }
 
@@ -61,6 +76,9 @@ public class TouristController {
             selected.setEmergencyContact(EmergencyContactField.getText());
             touristTable.refresh();
             clearFields();
+            saveData();
+        }else{
+            showAlert("Error", "Please select a valid tourist to update");
         }
     }
 
@@ -70,4 +88,17 @@ public class TouristController {
         contactField.clear();
         EmergencyContactField.clear();
     }
+
+    private void saveData() {
+        FileHandler.saveTourists(touristList, "data/tourists.txt");
+    }
+
+    private void showAlert(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle(title);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
+
 }

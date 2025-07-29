@@ -1,5 +1,6 @@
 package com.example.app.model;
 import java.time.LocalDate;
+import java.util.List;
 
 public class Booking {
     private Tourist tourist;
@@ -50,4 +51,24 @@ public class Booking {
     public void setStatus(String status) {
         this.status = status;
     }
+
+    @Override
+    public String toString() {
+        return tourist.getName() + ";" +
+                guide.getName() + ";" +
+                attraction.getName() + ";" +
+                date.toString() + ";" +
+                status;
+    }
+
+    public static Booking fromString(String line, List<Tourist> tourists, List<Guide> guides, List<Attraction> attractions) {
+        String[] parts = line.split(";");
+        Tourist tourist = tourists.stream().filter(t -> t.getName().equals(parts[0])).findFirst().orElse(null);
+        Guide guide = guides.stream().filter(g -> g.getName().equals(parts[1])).findFirst().orElse(null);
+        Attraction attraction = attractions.stream().filter(a -> a.getName().equals(parts[2])).findFirst().orElse(null);
+        LocalDate date = LocalDate.parse(parts[3]);
+        String status = parts[4];
+        return new Booking(tourist, guide, attraction, date, status);
+    }
+
 }

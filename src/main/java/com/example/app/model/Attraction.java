@@ -32,4 +32,20 @@ public class Attraction {
         return altitude;
     }
     public void setAltitude(int altitude) {this.altitude = altitude; }
+
+    @Override
+    public String toString() {
+        return name + ";" + type + ";" + location + ";" + altitude;
+    }
+
+    public static Attraction fromString(String line) {
+        String[] parts = line.split(";");
+        String name = parts[0];
+        String type = parts[1];
+        String location = parts[2];
+        int altitude = Integer.parseInt(parts[3]);
+        return new Attraction(name, type, location, altitude);
+    }
+
 }
+

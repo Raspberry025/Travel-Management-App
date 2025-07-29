@@ -35,5 +35,20 @@ public class Guide {
     }
     public void setExperienceYears(int experienceYears) {
         this.experienceYears = experienceYears; }
+
+    @Override
+    public String toString() {
+        return name + ";" + String.join(",", languages) + ";" + experienceYears + ";" + contact;
+    }
+
+    public static Guide fromString(String line) {
+        String[] parts = line.split(";");
+        String name = parts[0];
+        List<String> languages = List.of(parts[1].split(","));
+        int experienceYears = Integer.parseInt(parts[2]);
+        String contact = parts[3];
+        return new Guide(name, languages, experienceYears, contact);
+    }
+
 }
 

@@ -33,4 +33,15 @@ public class Tourist {
     }
     public void setEmergencyContact(String emergencyContact) {
         this.emergencyContact = emergencyContact; }
+
+    @Override
+    public String toString() {
+        return name + ";" + nationality + ";" + contact + ";" + emergencyContact;
+    }
+
+    public static Tourist fromString(String line) {
+        String[] parts = line.split(";");
+        return new Tourist(parts[0], parts[1], parts[2], parts[3]);
+    }
+
 }

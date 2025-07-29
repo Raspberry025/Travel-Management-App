@@ -1,6 +1,7 @@
 package com.example.app.controller;
 
 import com.example.app.model.Guide;
+import com.example.app.util.FileHandler;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -22,7 +23,7 @@ public class GuideController {
     @FXML private TextField contactField;
     @FXML private Spinner<Integer> experienceSpinner;
 
-    private ObservableList<Guide> guideList = FXCollections.observableArrayList();
+    private final ObservableList<Guide> guideList = FXCollections.observableArrayList();
 
     @FXML
     public void initialize() {
@@ -30,6 +31,9 @@ public class GuideController {
         contactColumn.setCellValueFactory(data -> new javafx.beans.property.SimpleStringProperty(data.getValue().getContact()));
         languagesColumn.setCellValueFactory(data -> new javafx.beans.property.SimpleStringProperty(String.join(", ", data.getValue().getLanguages())));
         experienceColumn.setCellValueFactory(data -> new javafx.beans.property.SimpleIntegerProperty(data.getValue().getExperienceYears()).asObject());
+
+        List<Guide> loaded = FileHandler.loadGuides("data/guides.txt");
+        guideList.addAll(loaded);
 
         guideTable.setItems(guideList);
         experienceSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 50, 1));
@@ -40,13 +44,17 @@ public class GuideController {
         List<String> langs = Arrays.asList(languagesField.getText().split(",\\s*"));
         Guide guide = new Guide(nameField.getText(), langs, experienceSpinner.getValue(), contactField.getText());
         guideList.add(guide);
+        saveData();
         clearFields();
     }
 
     @FXML
     public void handleDelete() {
         Guide selected = guideTable.getSelectionModel().getSelectedItem();
-        if (selected != null) guideList.remove(selected);
+        if (selected != null) {
+            guideList.remove(selected);
+            saveData();
+        }
     }
 
     @FXML
@@ -59,6 +67,7 @@ public class GuideController {
             selected.setExperienceYears(experienceSpinner.getValue());
             guideTable.refresh();
             clearFields();
+            saveData();
         }
     }
 
@@ -67,5 +76,9 @@ public class GuideController {
         contactField.clear();
         languagesField.clear();
         experienceSpinner.getValueFactory().setValue(1);
+    }
+
+    private void saveData() {
+        FileHandler.saveGuides(guideList, "data/guides.txt");
     }
 }
