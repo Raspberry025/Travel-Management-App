@@ -32,7 +32,7 @@ public class GuideController {
         languagesColumn.setCellValueFactory(data -> new javafx.beans.property.SimpleStringProperty(String.join(", ", data.getValue().getLanguages())));
         experienceColumn.setCellValueFactory(data -> new javafx.beans.property.SimpleIntegerProperty(data.getValue().getExperienceYears()).asObject());
 
-        List<Guide> loaded = FileHandler.loadGuides("data/guides.txt");
+        List<Guide> loaded = FileHandler.loadGuides("/com/example/app/data/guides.txt");
         guideList.addAll(loaded);
 
         guideTable.setItems(guideList);
@@ -79,6 +79,6 @@ public class GuideController {
     }
 
     private void saveData() {
-        FileHandler.saveGuides(guideList, "data/guides.txt");
+        FileHandler.saveGuides(guideList, "/com/example/app/data/guides.txt");
     }
 }

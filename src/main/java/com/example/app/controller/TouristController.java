@@ -30,7 +30,7 @@ public class TouristController {
         contactColumn.setCellValueFactory(data -> new javafx.beans.property.SimpleStringProperty(data.getValue().getContact()));
         EmergencyContactColumn.setCellValueFactory(data -> new javafx.beans.property.SimpleStringProperty(data.getValue().getEmergencyContact()));
 
-        List<Tourist> loaded = FileHandler.loadTourists("data/tourists.txt");
+        List<Tourist> loaded = FileHandler.loadTourists("/com/example/app/data/tourists.txt");
         touristList.addAll(loaded);
 
         touristTable.setItems(touristList);
@@ -90,7 +90,7 @@ public class TouristController {
     }
 
     private void saveData() {
-        FileHandler.saveTourists(touristList, "data/tourists.txt");
+        FileHandler.saveTourists(touristList, "/com/example/app/data/tourists.txt");
     }
 
     private void showAlert(String title, String message) {

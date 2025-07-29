@@ -29,7 +29,7 @@ public class AttractionController {
         locationColumn.setCellValueFactory(data -> new javafx.beans.property.SimpleStringProperty(data.getValue().getLocation()));
         altitudeColumn.setCellValueFactory(data -> new javafx.beans.property.SimpleIntegerProperty(data.getValue().getAltitude()).asObject());
 
-        List<Attraction> loaded = FileHandler.loadAttractions("data/attractions.txt");
+        List<Attraction> loaded = FileHandler.loadAttractions("/com/example/app/data/attractions.txt");
         attractionList.addAll(loaded);
 
         attractionTable.setItems(attractionList);
@@ -56,6 +56,6 @@ public class AttractionController {
         altitudeSpinner.getValueFactory().setValue(0);
     }
     private void saveData() {
-        FileHandler.saveAttractions(attractionList, "data/attractions.txt");
+        FileHandler.saveAttractions(attractionList, "/com/example/app/data/attractions.txt");
     }
 }

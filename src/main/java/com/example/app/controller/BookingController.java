@@ -36,7 +36,7 @@ public class BookingController {
         dateColumn.setCellValueFactory(data -> new javafx.beans.property.SimpleObjectProperty<>(data.getValue().getDate()));
 
         List<Booking> loaded = FileHandler.loadBookings(
-                "data/bookings.txt",
+                "/com/example/app/data/bookings.txt",
                 touristCombo.getItems(),
                 guideCombo.getItems(),
                 attractionCombo.getItems()
@@ -77,6 +77,6 @@ public class BookingController {
         statusField.clear();
     }
     private void saveData() {
-        FileHandler.saveBookings(bookingList, "data/bookings.txt");
+        FileHandler.saveBookings(bookingList, "/com/example/app/data/bookings.txt");
     }
 }
