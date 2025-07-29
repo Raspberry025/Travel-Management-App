@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.example.app.controller.DashboardController">
+
+    <left>
+        <VBox alignment="CENTER" spacing="10.0">
+            <padding>
+                <Insets top="20.0" right="20.0" bottom="20.0" left="20.0"/>
+            </padding>
+
+            <Label fx:id="welcomeText" text="Dashboard" style="-fx-font-size: 16px;" />
+            <Button text="Tourists" onAction="#handleTourists"/>
+            <Button text="Attractions" onAction="#handleAttractions"/>
+            <Button text="Bookings" onAction="#handleBookings"/>
+            <Button text="Guides" onAction="#handleGuides"/>
+            <Button text="Exit" onAction="#handleExit"/>
+        </VBox>
+    </left>
+
+    <center>
+        <Label text="Welcome to the Nepal Travel Management System!" style="-fx-font-size: 18px;"/>
+    </center>
+</BorderPane>

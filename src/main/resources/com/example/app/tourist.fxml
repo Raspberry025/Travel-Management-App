@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.example.app.controller.TouristController">
+
+    <top>
+        <Label text="Tourist Management" style="-fx-font-size: 20px; -fx-padding: 10;" />
+    </top>
+
+    <center>
+        <TableView fx:id="touristTable">
+            <columns>
+                <TableColumn fx:id="nameColumn" text="Name" />
+                <TableColumn fx:id="nationalityColumn" text="Nationality" />
+                <TableColumn fx:id="contactColumn" text="Contact" />
+                <TableColumn fx:id="EmergencyContactColumn" text="Emergency Contact"/>
+            </columns>
+        </TableView>
+    </center>
+
+    <bottom>
+        <HBox spacing="10" style="-fx-padding: 10;">
+            <TextField fx:id="nameField" promptText="Name"/>
+            <TextField fx:id="nationalityField" promptText="Nationality"/>
+            <TextField fx:id="contactField" promptText="Contact"/>
+            <TextField fx:id="EmergencyContactField" promptText="Emergency Contact"/>
+            <Button text="Add Tourist" onAction="#handleAdd"/>
+            <Button text="Update" onAction="#handleUpdate"/>
+            <Button text="Delete" onAction="#handleDelete"/>
+        </HBox>
+    </bottom>
+</BorderPane>

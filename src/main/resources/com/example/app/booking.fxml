@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.example.app.controller.BookingController"
+            prefHeight="400.0" prefWidth="600.0">
+    <TableView fx:id="bookingTable">
+        <columns>
+            <TableColumn fx:id="touristColumn" text="Tourist"/>
+            <TableColumn fx:id="guideColumn" text="Guide"/>
+            <TableColumn fx:id="attractionColumn" text="Attraction"/>
+            <TableColumn fx:id="dateColumn" text="Date"/>
+            <TableColumn fx:id="statusColumn" text="Status"/>
+        </columns>
+    </TableView>
+
+    <HBox spacing="10">
+        <ComboBox fx:id="touristCombo" promptText="Tourist"/>
+        <ComboBox fx:id="guideCombo" promptText="Guide"/>
+        <ComboBox fx:id="attractionCombo" promptText="Attraction"/>
+    </HBox>
+
+    <HBox spacing="10">
+        <DatePicker fx:id="datePicker"/>
+        <TextField fx:id="statusField" promptText="Status"/>
+    </HBox>
+
+    <HBox spacing="10">
+        <Button text="Add" onAction="#handleAdd"/>
+    </HBox>
+
+</AnchorPane>

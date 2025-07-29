@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.example.app.controller.GuideController"
+            prefWidth="600.0">
+
+    <TableView fx:id="guideTable">
+        <columns>
+            <TableColumn fx:id="nameColumn" text="Name"/>
+            <TableColumn fx:id="languagesColumn" text="Languages"/>
+            <TableColumn fx:id="experienceColumn" text="Experience (Years)"/>
+            <TableColumn fx:id="contactColumn" text="Contact"/>
+        </columns>
+    </TableView>
+
+    <HBox spacing="10">
+        <TextField fx:id="nameField" promptText="Name"/>
+        <TextField fx:id="languagesField" promptText="Languages (comma separated)"/>
+    </HBox>
+
+    <HBox spacing="10">
+        <TextField fx:id="contactField" promptText="Contact"/>
+        <Spinner fx:id="experienceSpinner"/>
+    </HBox>
+
+    <HBox spacing="10">
+        <Button text="Add" onAction="#handleAdd"/>
+        <Button text="Update" onAction="#handleUpdate"/>
+        <Button text="Delete" onAction="#handleDelete"/>
+    </HBox>
+</AnchorPane>
