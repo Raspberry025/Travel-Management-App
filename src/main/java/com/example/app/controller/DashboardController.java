@@ -141,6 +141,7 @@ public class DashboardController {
         boolean isAdmin = user.getisAdmin();
 
         Guides.setVisible(isAdmin);
+        Attractions.setVisible(isAdmin);
 
         if(!isAdmin) {
             viewMenu.setVisible(false);
