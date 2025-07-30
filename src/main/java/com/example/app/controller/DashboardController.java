@@ -11,6 +11,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Border;
 import javafx.scene.text.Font;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -104,6 +105,22 @@ public class DashboardController {
             alert.setHeaderText("Could not load window");
             alert.setContentText("Failed to load" + fxmlFile + ": " + e.getMessage());
             alert.showAndWait();
+        }
+    }
+
+    @FXML
+    private void openStatsWindow() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/app/stats.fxml"));
+            Parent root = loader.load();
+
+            Stage stage = new Stage();
+            stage.setTitle("Statistics Dashboard");
+            stage.setScene(new Scene(root));
+            stage.initModality(Modality.APPLICATION_MODAL); // Optional: block interaction with main window
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

@@ -1,36 +1,54 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.example.app.controller.DashboardController"
-            fx:id="rootPane" prefWidth="600" prefHeight="400"    >
+<VBox xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.example.app.controller.DashboardController">
 
-    <left>
-        <VBox alignment="TOP_CENTER" spacing="15.0" BorderPane.alignment="CENTER">
-            <padding>
-                <Insets top="30" right="20.0" bottom="20.0" left="20.0"/>
-            </padding>
+    <MenuBar style="-fx-background-color: lightblue; -fx-border-color: red;" prefHeight="42">
+        <menus>
+            <Menu text="%menu.view">
+                <MenuItem onAction="#openStatsWindow" text="Show Statistics"/>
+            </Menu>
+        </menus>
+    </MenuBar>
 
-            <Label fx:id="welcomeText" text="%dashboard.title" style="-fx-font-size: 20px; -fx-font-weight: bold; fx-font-family: 'Noto Sans Devanagari';" />
-            <Button fx:id="Tourists" text="%button.tourists"
-                    maxWidth="180" prefHeight="35" style="-fx-font-size: 14px;" onAction="#handleTourists"/>
-            <Button fx:id="Attractions" text="%button.attractions"
-                    maxWidth="180" prefHeight="35" style="-fx-font-size: 14px;" onAction="#handleAttractions"/>
-            <Button fx:id="Bookings" text="%button.bookings"
-                    maxWidth="180" prefHeight="35" style="-fx-font-size: 14px;" onAction="#handleBookings"/>
-            <Button fx:id="Guides" text="%button.guides"
-                    maxWidth="180" prefHeight="35" style="-fx-font-size: 14px;" onAction="#handleGuides"/>
-            <Button fx:id="Exit" text="%button.exit"
-                    maxWidth="180" prefHeight="35" style="-fx-font-size: 14px;" onAction="#handleExit"/>
-        </VBox>
-    </left>
+    <BorderPane fx:id="rootPane" VBox.vgrow="ALWAYS" prefHeight="400" prefWidth="600">
 
-    <center>
-        <Label fx:id="centerWelcomeLabel" text="%label.welcome" style="-fx-font-size: 22px; -fx-font-weight: bold;-fx-font-family: 'Noto Sans Devanagari';"
-                BorderPane.alignment="CENTER"/>
-    </center>
-</BorderPane>
+        <left>
+            <VBox alignment="TOP_CENTER" maxWidth="207.0" prefHeight="353.0" prefWidth="195.0" spacing="15.0">
+                <padding>
+                    <Insets bottom="20.0" left="20.0" right="20.0" top="30"/>
+                </padding>
+
+                <Label fx:id="welcomeText"
+                       style="-fx-font-size: 20px; -fx-font-weight: bold; fx-font-family: 'Noto Sans Devanagari';"
+                       text="%dashboard.title"/>
+                <Button fx:id="Tourists" maxWidth="180" onAction="#handleTourists" prefHeight="35"
+                        style="-fx-font-size: 14px;" text="%button.tourists"/>
+                <Button fx:id="Attractions" maxWidth="180" onAction="#handleAttractions" prefHeight="35"
+                        style="-fx-font-size: 14px;" text="%button.attractions"/>
+                <Button fx:id="Bookings" maxWidth="180" onAction="#handleBookings" prefHeight="35"
+                        style="-fx-font-size: 14px;" text="%button.bookings"/>
+                <Button fx:id="Guides" maxWidth="180" onAction="#handleGuides" prefHeight="35"
+                        style="-fx-font-size: 14px;" text="%button.guides"/>
+                <Button fx:id="Exit" maxWidth="180" onAction="#handleExit" prefHeight="35"
+                        style="-fx-font-size: 14px;" text="%button.exit"/>
+            </VBox>
+        </left>
+
+        <center>
+            <Label fx:id="centerWelcomeLabel"
+                   style="-fx-font-size: 22px; -fx-font-weight: bold;-fx-font-family: 'Noto Sans Devanagari';"
+                   text="%label.welcome" BorderPane.alignment="CENTER"/>
+        </center>
+
+    </BorderPane>
+</VBox>

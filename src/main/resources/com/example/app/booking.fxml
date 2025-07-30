@@ -15,8 +15,15 @@
                 <TableColumn fx:id="attractionColumn" text="Attraction"/>
                 <TableColumn fx:id="dateColumn" text="Date"/>
                 <TableColumn fx:id="statusColumn" text="Status"/>
+                <TableColumn fx:id="priceColumn" text = "Price"/>
+                <TableColumn fx:id="emergencyReportCol" text="Emergency Report" />
             </columns>
         </TableView>
+
+        <HBox spacing="10">
+            <Button text="Report Emergency" onAction="#handleEmergency" prefWidth="150"/>
+        </HBox>
+
 
         <HBox spacing="10">
             <ComboBox fx:id="touristCombo" promptText="Tourist" prefWidth="180"/>

@@ -20,7 +20,7 @@ public class Main extends Application {
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("dashboard.fxml"), bundle);
         Parent root = fxmlLoader.load();
         primaryStage.setTitle(bundle.getString("dashboard.title"));
-        primaryStage.setScene(new Scene(root, 400, 300));
+        primaryStage.setScene(new Scene(root, 800, 600));
         primaryStage.show();
     }
     public static void main(String[] args) {

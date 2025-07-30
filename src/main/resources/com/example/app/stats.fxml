@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.chart.*?>
+
+<?import javafx.geometry.Insets?>
+<VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.example.app.controller.StatsController" spacing="10" >
+    <padding>
+        <Insets top="10" right="10" bottom="10" left="10"/>
+    </padding>
+
+    <TabPane fx:id="statsTabPane" VBox.vgrow="ALWAYS">
+        <tabs>
+            <Tab text="Tourists by Nationality">
+                <PieChart fx:id="touristNationalityPieChart" />
+            </Tab>
+            <Tab text="Popular Attractions">
+                <BarChart fx:id="popularAttractionsBarChart">
+                    <xAxis>
+                        <CategoryAxis label="Attraction" />
+                    </xAxis>
+                    <yAxis>
+                        <NumberAxis label="Bookings" />
+                    </yAxis>
+                </BarChart>
+            </Tab>
+            <Tab text="Bookings per Month">
+                <BarChart fx:id="bookingsPerMonthBarChart">
+                    <xAxis>
+                        <CategoryAxis label="Month" />
+                    </xAxis>
+                    <yAxis>
+                        <NumberAxis label="Total Bookings" />
+                    </yAxis>
+                </BarChart>
+            </Tab>
+        </tabs>
+    </TabPane>
+
+    <Button text="Export Stats" onAction="#exportStats" maxWidth="150"/>
+</VBox>

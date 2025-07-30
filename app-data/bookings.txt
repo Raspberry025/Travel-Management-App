@@ -1,2 +1,4 @@
-Harold Parker;Sakar Mainali;Annapurna Base Camp ;2025-07-08;Planning
-Sambid Shrestha;Sakar Mainali;Annapurna Base Camp ;2025-08-01;Planning
+Harold Parker;Sakar Mainali;Annapurna Base Camp ;2025-07-08;Planning;0.0;
+Sambid Shrestha;Sakar Mainali;Annapurna Base Camp ;2025-08-01;Planning;0.0;[2025-07-29T21:36:07.645968100] Avalanche
+Anwesha Karmacharya;Rujal Maharjan;Manaslu Circuit Trek;2025-10-10;Planning;4250.0;
+Harold Parker;Rujal Maharjan;Manaslu Circuit Trek;2025-09-02;planning;5000.0;

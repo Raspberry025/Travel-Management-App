@@ -1,5 +1,6 @@
 package com.example.app.model;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class Booking {
@@ -8,13 +9,16 @@ public class Booking {
     private Attraction attraction;
     private LocalDate date;
     private String status;
+    private String emergencyReport;
+    private double price;
 
-    public Booking(Tourist tourist, Guide  guide, Attraction attraction, LocalDate date, String status) {
+    public Booking(Tourist tourist, Guide  guide, Attraction attraction, LocalDate date, String status, double price) {
         this.tourist = tourist;
         this.guide = guide;
         this.attraction = attraction;
         this.date = date;
         this.status = status;
+        this.price = price;
     }
 
     public Tourist getTourist() {
@@ -52,13 +56,26 @@ public class Booking {
         this.status = status;
     }
 
+    public double getPrice() {
+        return price;
+    }
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    public void reportEmergency(String message) {
+        this.emergencyReport = "[" + LocalDateTime.now() + "] " + message;
+    }
+    public String getEmergencyReport() { return emergencyReport; }
     @Override
     public String toString() {
         return tourist.getName() + ";" +
                 guide.getName() + ";" +
                 attraction.getName() + ";" +
                 date.toString() + ";" +
-                status;
+                status + ";" +
+                price + ";" +
+                (emergencyReport != null ? emergencyReport.replace(";", ",") : "");
     }
 
     public static Booking fromString(String line, List<Tourist> tourists, List<Guide> guides, List<Attraction> attractions) {
@@ -68,7 +85,10 @@ public class Booking {
         Attraction attraction = attractions.stream().filter(a -> a.getName().equals(parts[2])).findFirst().orElse(null);
         LocalDate date = LocalDate.parse(parts[3]);
         String status = parts[4];
-        return new Booking(tourist, guide, attraction, date, status);
-    }
+        double price = parts.length > 5 ? Double.parseDouble(parts[5]) : 0;
+        Booking booking = new Booking(tourist, guide, attraction, date, status, price);
+        if(parts.length > 8) booking.emergencyReport = parts[8].isEmpty() ? null : parts[8];
 
+        return booking;
+    }
 }
