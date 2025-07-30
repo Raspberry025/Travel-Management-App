@@ -1,5 +1,6 @@
 package com.example.app.controller;
 
+import com.example.app.model.User;
 import com.example.app.util.LangSwitch;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -7,17 +8,14 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Label;
-import javafx.scene.layout.Border;
+import javafx.scene.control.*;
 import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.HBox;
+import javafx.scene.text.Text;
 
 import java.io.IOException;
 import java.net.URL;
@@ -36,6 +34,10 @@ public class DashboardController {
     @FXML private Button Bookings;
     @FXML private Button Guides;
     @FXML private Button Exit;
+    @FXML private Button adminOnlyButton;
+    @FXML private User CurrentUser;
+    @FXML private Menu viewMenu;
+    @FXML private MenuItem statsMenuItem;
 
     @FXML private VBox leftVBox;
 
@@ -121,6 +123,21 @@ public class DashboardController {
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    public void setUser(User user) {
+        this.CurrentUser = user;
+
+        welcomeText.setText("Welcome, " + user.getUsername());
+
+        boolean isAdmin = user.getisAdmin();
+
+        Bookings.setVisible(isAdmin);
+        Guides.setVisible(isAdmin);
+
+        if(!isAdmin) {
+            viewMenu.setVisible(false);
         }
     }
 

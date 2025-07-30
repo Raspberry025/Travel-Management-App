@@ -14,8 +14,8 @@
 
     <MenuBar style="-fx-background-color: lightblue; -fx-border-color: red;" prefHeight="42">
         <menus>
-            <Menu text="%menu.view">
-                <MenuItem onAction="#openStatsWindow" text="Show Statistics"/>
+            <Menu fx:id="viewMenu" text="%menu.view">
+                <MenuItem fx:id="statsMenuItem" onAction="#openStatsWindow" text="Show Statistics"/>
             </Menu>
         </menus>
     </MenuBar>

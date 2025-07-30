@@ -1,9 +1,6 @@
 package com.example.app.util;
 
-import com.example.app.model.Tourist;
-import com.example.app.model.Guide;
-import com.example.app.model.Attraction;
-import com.example.app.model.Booking;
+import com.example.app.model.*;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -24,6 +21,19 @@ public class FileHandler {
             System.err.println("Failed to create data directory: " + e.getMessage());
         }
     }
+
+    // Save users
+    public static void saveUsers(List<User> users) throws IOException {
+        Path filePath = Paths.get(DATA_DIR, "users.txt");
+        saveObjects(users, filePath);
+    }
+
+    // Load users
+    public static List<User> loadUsers() throws IOException {
+        Path filePath = Paths.get(DATA_DIR, "users.txt");
+        return loadObjects(filePath, User::fromString);
+    }
+
 
     // === TOURIST METHODS ===
     public static void saveTourists(List<Tourist> tourists) throws IOException {

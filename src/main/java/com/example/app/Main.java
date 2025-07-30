@@ -17,9 +17,9 @@ public class Main extends Application {
         Locale defaultLocale = new Locale("en");
         ResourceBundle bundle = ResourceBundle.getBundle("messages", defaultLocale);
 
-        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("dashboard.fxml"), bundle);
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("Login.fxml"), bundle);
         Parent root = fxmlLoader.load();
-        primaryStage.setTitle(bundle.getString("dashboard.title"));
+        primaryStage.setTitle(bundle.getString("login.title"));
         primaryStage.setScene(new Scene(root, 800, 600));
         primaryStage.show();
     }
