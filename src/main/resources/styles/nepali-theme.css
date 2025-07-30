@@ -1,14 +1,38 @@
+/* styles/nepali-theme.css */
 .root {
-    -fx-background-image: url("/images/Mandala.jpg");
-    -fx-background-size: cover;
-    -fx-background-repeat: no-repeat;
-    -fx-font-family: 'Preeti', 'Kalimati', 'Arial';
-    -fx-background-color: linear-gradient(to bottom, #f5f2ea, #e2d4ba); /* earthy tones */
+    /* Gradient fallback underneath */
+    -fx-background-color: linear-gradient(to bottom, #f5f2ea, #e2d4ba);
+    -fx-background-insets: 0, 0;
+    -fx-background-radius: 0, 0;
+
+    /* Unicode Devanagari first */
+    -fx-font-family: 'Noto Sans Devanagari', 'Nirmala UI', 'Arial';
+}
+
+.login-root {
+    -fx-background-image: url("../images/Login.jpg");
+}
+
+/* Dashboard background */
+.dashboard-root {
+    -fx-background-image: url("../images/Dashboard.jpg");
+    -fx-background-repeat: no-repeat;              /* ← no tiling */
+    -fx-background-position: center bottom;        /* ← bottom center anchor */
+    -fx-background-size: 100% auto;                /* ← stretch to full width, keep aspect ratio */
+
+    -fx-background-color: linear-gradient(to bottom,
+    rgba(255,255,255,0.0) 55%,
+    rgba(255,255,255,0.85) 78%,
+    rgba(246,250,255,1.0) 100%),
+    linear-gradient(to bottom, #F9FBFF, #EAF2FF);
+    -fx-background-insets: 0, 0;                   /* one inset per layer */
+    -fx-background-radius: 0, 0;
+
 }
 
 /* Headings (like "Sign Up") */
 .label {
-    -fx-text-fill: #8a4b27; /* warm earthy brown */
+    -fx-text-fill: #8a4b27;
     -fx-font-size: 16px;
 }
 
@@ -16,7 +40,7 @@
 .label.title {
     -fx-font-size: 24px;
     -fx-font-weight: bold;
-    -fx-text-fill: #b13e00; /* red brick tone */
+    -fx-text-fill: #b13e00;
 }
 
 /* Text input fields */
@@ -39,15 +63,10 @@
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 3, 0, 1, 1);
 }
 
-.button:hover {
-    -fx-background-color: #caa06a;
-}
+.button:hover { -fx-background-color: #caa06a; }
+.button:pressed { -fx-background-color: #b38659; }
 
-.button:pressed {
-    -fx-background-color: #b38659;
-}
-
-/* Link-style buttons (e.g., Sign Up link) */
+/* Link-style buttons */
 .button.link-style {
     -fx-background-color: transparent;
     -fx-text-fill: #1a73e8;

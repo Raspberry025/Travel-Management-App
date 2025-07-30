@@ -1,10 +1,13 @@
 package com.example.app.controller;
 
+import com.example.app.model.User;
 import com.example.app.util.FileHandler;
 import com.example.app.model.Tourist;
+import com.example.app.util.Session;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
@@ -26,7 +29,7 @@ public class TouristController {
     @FXML private TextField EmergencyContactField;
 
     private final ObservableList<Tourist> touristList = FXCollections.observableArrayList();
-
+    private FilteredList<Tourist> viewList;
     @FXML
     public void initialize() {
         nameColumn.setCellValueFactory(data -> new javafx.beans.property.SimpleStringProperty(data.getValue().getName()));
@@ -35,7 +38,28 @@ public class TouristController {
         EmergencyContactColumn.setCellValueFactory(data -> new javafx.beans.property.SimpleStringProperty(data.getValue().getEmergencyContact()));
 
         loadTouristData();
+
+        viewList = new FilteredList<>(touristList);
+        applyVisibilityFilter();
         touristTable.setItems(touristList);
+    }
+
+    private void applyVisibilityFilter() {
+        User u = Session.getCurrentUser();
+        if (u == null) {
+            viewList.setPredicate(t-> false);
+            return;
+        }
+        if(Session.isAdmin()){
+            viewList.setPredicate(t -> true);
+        } else {
+            String myId = Session.getUserId();
+            viewList.setPredicate(t -> myId != null && myId.equals(t.getOwnerid()));
+        }
+    }
+
+    public void onUserChanged(){
+        if(viewList != null) applyVisibilityFilter();
     }
 
     private void loadTouristData() {
@@ -65,7 +89,8 @@ public class TouristController {
                 nameField.getText(),
                 nationalityField.getText(),
                 contactField.getText(),
-                EmergencyContactField.getText()
+                EmergencyContactField.getText(),
+                Session.getUserId()
         );
 
         touristList.add(t);
@@ -77,6 +102,10 @@ public class TouristController {
     public void handleDelete() {
         Tourist selected = touristTable.getSelectionModel().getSelectedItem();
         if (selected != null) {
+            if(!Session.isAdmin() && !Session.getUserId().equals(selected.getOwnerid())) {
+                showAlert(Alert.AlertType.ERROR, "Error", "You can only delete your own record.");
+                return;
+            }
             touristList.remove(selected);
             saveData();
         } else {
@@ -88,6 +117,9 @@ public class TouristController {
     public void handleUpdate() {
         Tourist selected = touristTable.getSelectionModel().getSelectedItem();
         if (selected != null) {
+            if(!Session.isAdmin() && !Session.getUserId().equals(selected.getOwnerid())) {
+                showAlert(Alert.AlertType.ERROR, "Error", "You can only update your own record.");
+            }
             selected.setName(nameField.getText());
             selected.setNationality(nationalityField.getText());
             selected.setContact(contactField.getText());

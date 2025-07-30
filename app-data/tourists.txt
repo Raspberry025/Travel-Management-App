@@ -1,3 +1,4 @@
-Sambid Shrestha;Nepali;9841231544;9851130311
-Harold Parker;UK;01-557681;9843838425
-Anwesha Karmacharya;Nepali;9841231366;9861120388
+;;;;
+Anwesha Karmacharya;Nepali;9841231366;9861120388;
+Sambid Shrestha;Nepali;9841231544;9851130311;Sambid Shrestha
+Ron McGuire;USA;01-5578910;9861308915;admin

@@ -1,2 +1,3 @@
-Annapurna Base Camp ;Trek;Annapurna Base Camp;4130
-Manaslu Circuit Trek;Trek;Mount Manaslu;5160
+Annapurna Base Camp;Trek;Annapurna;4130
+Manaslu Base Camp;Trek;Manaslu ;5154
+Poon Hill Trek;Trek;Poon Hill;3210

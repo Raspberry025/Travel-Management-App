@@ -11,14 +11,22 @@ public class Booking {
     private String status;
     private String emergencyReport;
     private double price;
+    private String ownerId;
 
-    public Booking(Tourist tourist, Guide  guide, Attraction attraction, LocalDate date, String status, double price) {
+    public Booking(Tourist tourist, Guide guide, Attraction attraction,
+                   LocalDate date, String status, double price) {
+        this(tourist, guide, attraction, date, status, price, null);
+    }
+
+    public Booking(Tourist tourist, Guide guide, Attraction attraction,
+                   LocalDate date, String status, double price, String ownerId) {
         this.tourist = tourist;
         this.guide = guide;
         this.attraction = attraction;
         this.date = date;
         this.status = status;
         this.price = price;
+        this.ownerId = ownerId;
     }
 
     public Tourist getTourist() {
@@ -63,32 +71,71 @@ public class Booking {
         this.price = price;
     }
 
+    public String getOwnerId() { return ownerId; }
+    public void setOwnerId(String ownerId) { this.ownerId = ownerId; }
+
     public void reportEmergency(String message) {
         this.emergencyReport = "[" + LocalDateTime.now() + "] " + message;
     }
     public String getEmergencyReport() { return emergencyReport; }
     @Override
     public String toString() {
-        return tourist.getName() + ";" +
-                guide.getName() + ";" +
-                attraction.getName() + ";" +
-                date.toString() + ";" +
-                status + ";" +
-                price + ";" +
-                (emergencyReport != null ? emergencyReport.replace(";", ",") : "");
+        String touristName    = tourist != null ? safe(tourist.getName())       : "";
+        String guideName      = guide != null   ? safe(guide.getName())         : "";
+        String attractionName = attraction != null ? safe(attraction.getName()) : "";
+        String dateStr        = date != null    ? date.toString()               : "";
+        String statusStr      = status != null  ? status                         : "";
+        String priceStr       = Double.toString(price);
+        String emergency      = emergencyReport != null ? emergencyReport.replace(";", ",") : "";
+        String owner          = ownerId != null ? ownerId : "";
+
+        // IMPORTANT: include the semicolon between emergency and owner
+        return String.join(";", touristName, guideName, attractionName, dateStr,
+                statusStr, priceStr, emergency, owner);
     }
+
+    private static String safe(String s) { return s == null ? "" : s.replace(";", ","); }
 
     public static Booking fromString(String line, List<Tourist> tourists, List<Guide> guides, List<Attraction> attractions) {
-        String[] parts = line.split(";");
-        Tourist tourist = tourists.stream().filter(t -> t.getName().equals(parts[0])).findFirst().orElse(null);
-        Guide guide = guides.stream().filter(g -> g.getName().equals(parts[1])).findFirst().orElse(null);
-        Attraction attraction = attractions.stream().filter(a -> a.getName().equals(parts[2])).findFirst().orElse(null);
-        LocalDate date = LocalDate.parse(parts[3]);
-        String status = parts[4];
-        double price = parts.length > 5 ? Double.parseDouble(parts[5]) : 0;
-        Booking booking = new Booking(tourist, guide, attraction, date, status, price);
-        if(parts.length > 8) booking.emergencyReport = parts[8].isEmpty() ? null : parts[8];
+        // keep trailing empties if you can: split(";", -1)
+        String[] parts = line.split(";", -1);
+        if (parts.length < 6) {
+            throw new IllegalArgumentException("Invalid booking line: " + line);
+        }
 
-        return booking;
+        String touristKey = parts[0];
+        String guideKey   = parts[1];
+        String attractionKey = parts[2];
+
+        Tourist tourist = tourists.stream()
+                .filter(t -> t.getName().equals(touristKey))
+                .findFirst()
+                .orElse(null);
+
+        Guide guide = guideKey.isEmpty() ? null :
+                guides.stream().filter(g -> g.getName().equals(guideKey)).findFirst().orElse(null);
+
+        // REQUIRED: attraction must resolve, otherwise skip this row
+        Attraction attraction = attractions.stream()
+                .filter(a -> a.getName().equals(attractionKey))
+                .findFirst()
+                .orElse(null);
+        if (attraction == null) {
+            throw new IllegalArgumentException("Unknown attraction: " + attractionKey);
+        }
+
+        LocalDate date = parts[3].isEmpty() ? null : LocalDate.parse(parts[3]);
+        String status  = parts[4].isEmpty() ? "BOOKED" : parts[4];
+
+        double price = 0;
+        try { price = parts[5].isEmpty() ? 0 : Double.parseDouble(parts[5]); } catch (NumberFormatException ignored) {}
+
+        String emergency = parts.length >= 7 ? (parts[6].isEmpty() ? null : parts[6]) : null;
+        String ownerId   = parts.length >= 8 ? (parts[7].isEmpty() ? null : parts[7]) : null;
+
+        Booking b = new Booking(tourist, guide, attraction, date, status, price, ownerId);
+        b.reportEmergency(emergency == null ? null : emergency); // or b.emergencyReport = emergency if you keep the field
+        return b;
     }
 }
+

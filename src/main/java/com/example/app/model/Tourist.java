@@ -5,12 +5,14 @@ public class Tourist {
     private String nationality;
     private String contact;
     private String emergencyContact;
+    private String ownerid;
 
-    public Tourist(String name, String nationality, String contact, String emergencyContact) {
+    public Tourist(String name, String nationality, String contact, String emergencyContact, String ownerid) {
         this.name = name;
         this.nationality = nationality;
         this.contact = contact;
         this.emergencyContact = emergencyContact;
+        this.ownerid = ownerid;
     }
 
     public String getName() {
@@ -34,20 +36,32 @@ public class Tourist {
     public void setEmergencyContact(String emergencyContact) {
         this.emergencyContact = emergencyContact; }
 
-    @Override
-    public String toString() {
-        return name + ";" + nationality + ";" + contact + ";" + emergencyContact;
+    public String getOwnerid() {
+        return ownerid;
+    }
+    public void setOwnerid(String ownerid) {
+        this.ownerid = ownerid;
     }
 
-    public static Tourist fromString(String str) {
-        if (str == null || str.trim().isEmpty()) {
-            return null;
-        }
-        String[] parts = str.split(";");
-        if (parts.length < 4) {
-            throw new IllegalArgumentException("Invalid Tourist String: " + str);
-        }
-        return new Tourist(parts[0], parts[1], parts[2], parts[3]);
+    @Override
+    public String toString() {
+        return name + ";" + nationality + ";" + contact + ";" + emergencyContact + ";" + (ownerid != null ? ownerid : "");
     }
+
+    public static Tourist fromString(String line) {
+        String[] parts = line.split(";");
+        if (parts.length < 4) {
+            throw new IllegalArgumentException("Invalid tourist data: " + line);
+        }
+        String name = parts[0];
+        String nationality = parts[1];
+        String contact = parts[2];
+        String emergencyContact = parts[3];
+        // ownerId is optional; if missing, set to null or empty
+        String ownerId = parts.length >= 5 ? parts[4] : null;
+
+        return new Tourist(name, nationality, contact, emergencyContact, ownerId);
+    }
+
 
 }

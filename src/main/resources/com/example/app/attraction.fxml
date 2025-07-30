@@ -24,6 +24,15 @@
             </columns>
         </TableView>
 
+        <!-- Booking controls -->
+        <HBox spacing="10" alignment="CENTER_LEFT">
+            <Label text="Date:"/>
+            <DatePicker fx:id="datePicker"/>
+            <Button fx:id="bookButton" text="Book" onAction="#handleBook"/>
+            <Button fx:id="cancelButton" text="Cancel Booking" onAction="#handleCancel"/>
+            <Label fx:id="statusLabel" text="Your bookings for this attraction: 0"/>
+        </HBox>
+
         <HBox spacing="10">
             <TextField fx:id="nameField" promptText="Name" prefWidth="200"/>
             <TextField fx:id="typeField" promptText="Type (Trek/Heritage)" prefWidth="200"/>
@@ -31,7 +40,7 @@
 
         <HBox spacing="10">
             <TextField fx:id="locationField" promptText="Location" prefWidth="200"/>
-            <Spinner fx:id="altitudeSpinner" prefWidth="200"/>
+            <TextField fx:id="altitudeField" promptText="Enter altitude"  prefWidth="200"/>
         </HBox>
 
         <HBox spacing="10">

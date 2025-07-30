@@ -1,12 +1,15 @@
 package com.example.app.controller;
 
+
 import com.example.app.model.User;
 import com.example.app.util.FileHandler;
 import com.example.app.util.PasswordUtils;
+import com.example.app.util.Session;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -19,6 +22,7 @@ import java.util.ResourceBundle;
 
 public class LoginController {
 
+    @FXML private GridPane rootPane;
     @FXML private TextField usernameField;
     @FXML private PasswordField passwordField;
 
@@ -26,6 +30,9 @@ public class LoginController {
 
     @FXML
     public void initialize() {
+        if (rootPane != null && !rootPane.getStyleClass().contains("login-root")) {
+            rootPane.getStyleClass().add("login-root");
+        }
         try {
             users = FileHandler.loadUsers();
         } catch (IOException e) {
@@ -54,6 +61,8 @@ public class LoginController {
             showAlert(Alert.AlertType.ERROR, "Login Failed", "Invalid username or password.");
             return;
         }
+
+        Session.setCurrentUser(user);
 
         // Login success: open appropriate dashboard
         openDashboard(user);

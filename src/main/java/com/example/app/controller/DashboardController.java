@@ -1,6 +1,8 @@
 package com.example.app.controller;
 
+
 import com.example.app.model.User;
+import com.example.app.repo.BookingRepository;
 import com.example.app.util.LangSwitch;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -43,12 +45,16 @@ public class DashboardController {
 
     @FXML private HBox languageToggleContainer;
 
+    private boolean bookingRepoLoaded = false;
     private Locale currentLocale = new Locale("en");
     private ResourceBundle bundle = ResourceBundle.getBundle("messages", currentLocale);
     private LangSwitch languageSwitcher;
 
     @FXML
     public void initialize() {
+        if (rootPane != null && !rootPane.getStyleClass().contains("dashboard-root")) {
+            rootPane.getStyleClass().add("dashboard-root");
+        }
         Font notoFont = Font.loadFont(getClass().getResourceAsStream("/Fonts/NotoSansDevanagari-Regular.ttf"), 16);
 
         // Apply the font to labels that show Nepali text
@@ -126,6 +132,7 @@ public class DashboardController {
         }
     }
 
+
     public void setUser(User user) {
         this.CurrentUser = user;
 
@@ -133,11 +140,24 @@ public class DashboardController {
 
         boolean isAdmin = user.getisAdmin();
 
-        Bookings.setVisible(isAdmin);
         Guides.setVisible(isAdmin);
 
         if(!isAdmin) {
             viewMenu.setVisible(false);
+        }
+
+        if (!bookingRepoLoaded) {
+            try {
+                BookingRepository.get().loadAll();
+                bookingRepoLoaded = true;
+            } catch (Exception e) {
+                e.printStackTrace();
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Data Load Error");
+                alert.setHeaderText("Could not load shared data");
+                alert.setContentText("Failed to load bookings/tourists/guides/attractions: " + e.getMessage());
+                alert.showAndWait();
+            }
         }
     }
 
