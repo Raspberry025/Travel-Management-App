@@ -84,8 +84,11 @@ public class LoginController {
             DashboardController controller = loader.getController();
             controller.setUser(user);  // Pass user to dashboard controller
 
+            Scene dashboardScene = new Scene(root);
+            dashboardScene.getStylesheets().add(getClass().getResource("/styles/nepali-theme.css").toExternalForm());
+
             Stage stage = (Stage) usernameField.getScene().getWindow();
-            stage.setScene(new Scene(root));
+            stage.setScene(dashboardScene);
             stage.setTitle((user.getisAdmin() ? "Admin" : "User") + " Dashboard");
             stage.show();
 

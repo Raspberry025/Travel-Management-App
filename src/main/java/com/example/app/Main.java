@@ -19,8 +19,12 @@ public class Main extends Application {
 
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("Login.fxml"), bundle);
         Parent root = fxmlLoader.load();
+
+        Scene scene = new Scene(root, 800, 600);
+
+        scene.getStylesheets().add(getClass().getResource("/styles/nepali-theme.css").toExternalForm());
         primaryStage.setTitle(bundle.getString("login.title"));
-        primaryStage.setScene(new Scene(root, 800, 600));
+        primaryStage.setScene(scene);
         primaryStage.show();
     }
     public static void main(String[] args) {

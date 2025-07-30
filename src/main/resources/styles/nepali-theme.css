@@ -1,0 +1,56 @@
+.root {
+    -fx-background-image: url("/images/Mandala.jpg");
+    -fx-background-size: cover;
+    -fx-background-repeat: no-repeat;
+    -fx-font-family: 'Preeti', 'Kalimati', 'Arial';
+    -fx-background-color: linear-gradient(to bottom, #f5f2ea, #e2d4ba); /* earthy tones */
+}
+
+/* Headings (like "Sign Up") */
+.label {
+    -fx-text-fill: #8a4b27; /* warm earthy brown */
+    -fx-font-size: 16px;
+}
+
+/* Title label */
+.label.title {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #b13e00; /* red brick tone */
+}
+
+/* Text input fields */
+.text-field, .password-field {
+    -fx-border-color: #aa7b4a;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-background-color: #fffdf7;
+    -fx-padding: 5px;
+}
+
+/* Buttons */
+.button {
+    -fx-background-color: #d9b382;
+    -fx-text-fill: #3d2b1f;
+    -fx-font-weight: bold;
+    -fx-background-radius: 6px;
+    -fx-border-radius: 6px;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 3, 0, 1, 1);
+}
+
+.button:hover {
+    -fx-background-color: #caa06a;
+}
+
+.button:pressed {
+    -fx-background-color: #b38659;
+}
+
+/* Link-style buttons (e.g., Sign Up link) */
+.button.link-style {
+    -fx-background-color: transparent;
+    -fx-text-fill: #1a73e8;
+    -fx-underline: true;
+    -fx-font-size: 13px;
+}
